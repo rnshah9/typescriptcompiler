@@ -1,0 +1,18 @@
+FROM --platform=linux/amd64 ubuntu:22.04
+
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y vim less file locate
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential cmake
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y curl tar wget
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y git ninja-build
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python-is-python3
+
+COPY . /repo
+WORKDIR /repo
+RUN chmod +x ./prepare_3rdParty_debug.sh
+RUN ./prepare_3rdParty_debug.sh
+WORKDIR /repo/tsc
+RUN chmod +x config_tsc_debug.sh
+RUN ./config_tsc_debug.sh
+RUN chmod +x build_tsc_debug.sh
+RUN ./build_tsc_debug.sh
